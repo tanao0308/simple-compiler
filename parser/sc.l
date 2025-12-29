@@ -13,7 +13,7 @@
                     yylval->emplace<int>(atoi(yytext)); // 使用 variant 时要用 ->emplace<int>() 模式
                     return yy::parser::token::NUMBER;
                 }
-[a-zA-Z_][a-zA-Z0-9_]* { // 变量
+[a-zA-Z_][a-zA-Z0-9_]* { // 变量/函数名
                     yylval->emplace<std::string>(yytext);
                     return yy::parser::token::IDENT;
                 }

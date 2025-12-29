@@ -7,7 +7,8 @@
 
 class FuncDefStmt : public Stmt {
 public:
-    FuncDefStmt(std::string func, std::string parm, Expr* expr): // 单参数 单expr内容
+    // 单参数 单expr内容
+    FuncDefStmt(std::string func, std::string parm, Expr* expr):
         func(func), parm(parm), expr(expr) {
         name = "func_def_stmt";
     }
