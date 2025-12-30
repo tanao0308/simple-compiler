@@ -6,7 +6,8 @@
 
 class VarDefStmt : public Stmt {
   public:
-    VarDefStmt(std::string var, Expr *expr) : var(var), expr(expr) {
+    VarDefStmt(std::shared_ptr<CompilerContext> cc, std::string var, Expr *expr)
+        : Stmt(cc), var(var), expr(expr) {
         name = "var_def_stmt";
     }
     void print(std::string prefix = "") override {

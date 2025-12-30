@@ -7,7 +7,10 @@
 
 class Program : public ASTNode {
   public:
-    Program(std::vector<Stmt *> *stmts) : stmts(stmts) { name = "program"; }
+    Program(std::shared_ptr<CompilerContext> cc, std::vector<Stmt *> *stmts)
+        : ASTNode(cc), stmts(stmts) {
+        name = "program";
+    }
     void print(std::string prefix = "") override {
         std::cout << prefix << name << std::endl;
         prefix += TAB;

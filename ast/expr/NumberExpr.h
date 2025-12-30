@@ -5,7 +5,10 @@
 
 class NumberExpr : public Expr {
   public:
-    NumberExpr(double num) : num(num) { name = "number_expr"; }
+    NumberExpr(std::shared_ptr<CompilerContext> cc, double num)
+        : Expr(cc), num(num) {
+        name = "number_expr";
+    }
     void print(std::string prefix = "") override {
         std::cout << prefix << " " << name << " " << num << std::endl;
     }

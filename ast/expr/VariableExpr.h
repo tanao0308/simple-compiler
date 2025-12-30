@@ -6,9 +6,12 @@
 
 class VariableExpr : public Expr {
   public:
-    VariableExpr(std::string var) : var(var) { name = "variable_expr"; }
+    VariableExpr(std::shared_ptr<CompilerContext> cc, std::string var)
+        : Expr(cc), var(var) {
+        name = "variable_expr";
+    }
     void print(std::string prefix = "") override {
-        std::cout << prefix << name << var << std::endl;
+        std::cout << prefix << name << " " << var << std::endl;
     }
 
   private:

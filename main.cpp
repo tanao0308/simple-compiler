@@ -1,3 +1,5 @@
+
+#include "ast/Compiler.h"
 #include "ast/program/Program.h"
 #include "sc.tab.hpp"
 #include <iostream>
@@ -12,17 +14,13 @@ int main() {
         cout << "无法读取文件" << endl;
         return 1;
     }
-    Program *program = nullptr;
-    yy::parser parser(&program);
+    Compiler compiler;
+    yy::parser parser(compiler);
     if (parser.parse() != 0) {
         cout << "编译错误" << endl;
         return 1;
     }
-    if (!program) {
-        cout << "no program" << endl;
-        return 1;
-    }
-    program->print();
+    compiler.print();
 
     return 0;
 }

@@ -8,12 +8,13 @@
 class FuncDefStmt : public Stmt {
   public:
     // 单参数 单expr内容
-    FuncDefStmt(std::string func, std::string parm, Expr *expr)
-        : func(func), parm(parm), expr(expr) {
+    FuncDefStmt(std::shared_ptr<CompilerContext> cc, std::string func,
+                std::string parm, Expr *expr)
+        : Stmt(cc), func(func), parm(parm), expr(expr) {
         name = "func_def_stmt";
     }
     void print(std::string prefix = "") override {
-        std::cout << prefix << func << "(" << parm << ")" << name << std::endl;
+        std::cout << prefix << func << "(" << parm << ") " << name << std::endl;
         prefix += TAB;
         expr->print(prefix);
     }
