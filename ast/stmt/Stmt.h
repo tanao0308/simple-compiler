@@ -1,5 +1,4 @@
 #pragma once
 #include "ast/ASTNode.h"
 
-class Stmt : public ASTNode {
-};
+class Stmt : public ASTNode {};

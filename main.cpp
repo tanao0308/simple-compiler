@@ -1,20 +1,19 @@
-#include <iostream>
 #include "ast/program/Program.h"
 #include "sc.tab.hpp"
+#include <iostream>
 
 using namespace std;
 
-extern FILE* yyin;
+extern FILE *yyin;
 
-int main()
-{
+int main() {
     yyin = fopen("../parser/input.sc", "r");
     if (!yyin) {
         cout << "无法读取文件" << endl;
         return 1;
     }
-    Program* program = nullptr;
-	yy::parser parser(&program);
+    Program *program = nullptr;
+    yy::parser parser(&program);
     if (parser.parse() != 0) {
         cout << "编译错误" << endl;
         return 1;

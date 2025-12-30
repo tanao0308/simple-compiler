@@ -1,15 +1,15 @@
 #pragma once
-#include <string>
-#include <iostream>
 #include "ast/Const.h"
-#include "ast/stmt/Stmt.h"
 #include "ast/expr/Expr.h"
+#include "ast/stmt/Stmt.h"
+#include <iostream>
+#include <string>
 
 class FuncDefStmt : public Stmt {
-public:
+  public:
     // 单参数 单expr内容
-    FuncDefStmt(std::string func, std::string parm, Expr* expr):
-        func(func), parm(parm), expr(expr) {
+    FuncDefStmt(std::string func, std::string parm, Expr *expr)
+        : func(func), parm(parm), expr(expr) {
         name = "func_def_stmt";
     }
     void print(std::string prefix = "") override {
@@ -17,8 +17,9 @@ public:
         prefix += TAB;
         expr->print(prefix);
     }
-private:
+
+  private:
     std::string func;
     std::string parm;
-    Expr* expr;
+    Expr *expr;
 };

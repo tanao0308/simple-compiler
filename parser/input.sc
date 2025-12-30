@@ -7,4 +7,4 @@ var1=1/var0;
 函数定义：
 def func0 (x)= x/2+x*x;
 函数调用
-3+func0(10);
+var1=3+func0(10);

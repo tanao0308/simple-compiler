@@ -5,10 +5,12 @@
 class ASTVisitor;
 
 class ASTNode {
-public:
+  public:
     virtual ~ASTNode() = default;
     virtual void print(std::string prefix = "") = 0;
-protected:
+
+  protected:
     std::string name;
-private:
+
+  private:
 };
