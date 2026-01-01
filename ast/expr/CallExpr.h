@@ -20,8 +20,7 @@ class CallExpr : public Expr {
         // 将参数带入函数体
         auto func = ctx.getFunc(funcName);
         if (!func) {
-            // 符号表找不到 func
-            return ASTResult(0);
+            throw std::runtime_error("符号表未找到函数");
         }
         // 获取参数表达式的结果
         auto paramRes = param->execute(ctx);

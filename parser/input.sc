@@ -1,8 +1,17 @@
-def f(x) {
+def g(x) {
     if (x) {
-        return 7;
+        return 1;
     } else {
-        return 9;
+        return 2;
     }
 }
-result = f(9);
+def f(y) {
+    res=0;
+    while(y+1) {
+        res=res+y+g(y);
+        y=y-1;
+    }
+    return res;
+}
+
+result = f(2);

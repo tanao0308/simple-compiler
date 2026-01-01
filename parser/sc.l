@@ -9,10 +9,11 @@
 %}
 
 %%
-"def"           { return yy::parser::token::DEF; } // 函数定义关键字
-"return"           { return yy::parser::token::RETURN; } // 函数定义关键字
-"if"            { return yy::parser::token::IF; } // 函数定义关键字
-"else"          { return yy::parser::token::ELSE; } // 函数定义关键字
+"def"           { return yy::parser::token::DEF; }
+"return"           { return yy::parser::token::RETURN; }
+"if"            { return yy::parser::token::IF; }
+"else"          { return yy::parser::token::ELSE; }
+"while"          { return yy::parser::token::WHILE; }
 [0-9]+(\.[0-9]*)?([eE][+-]?[0-9]+)? { // 数字
                 char *endptr;
                 errno = 0;

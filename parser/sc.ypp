@@ -19,6 +19,7 @@
   #include "ast/stmt/ListStmt.h"
   #include "ast/stmt/ReturnStmt.h"
   #include "ast/stmt/IfStmt.h"
+  #include "ast/stmt/WhileStmt.h"
   #include "ast/expr/Expr.h"
   #include "ast/expr/BinaryExpr.h"
   #include "ast/expr/NumberExpr.h"
@@ -37,7 +38,7 @@
 // 终结符
 %token <double> NUMBER
 %token <std::string> IDENT
-%token DEF RETURN IF ELSE
+%token DEF RETURN IF ELSE WHILE
 
 // 非终结符
 %type <std::unique_ptr<Program>> program
@@ -80,20 +81,23 @@ simple_stmt
     : expr ';' { // 语句用分号结束
           $$ = std::make_unique<ExprStmt>(std::move($1));
       }
-    | IDENT '=' expr ';' { // 变量定义/赋值语句
+    | IDENT '=' expr ';' { // 变量赋值语句
           $$ = std::make_unique<VarDefStmt>($1, std::move($3));
       }
-    | DEF IDENT '(' IDENT ')' stmt { // 新版函数定义语句 def f(x) { y=x*2; return y; }
+    | DEF IDENT '(' IDENT ')' stmt { // 函数定义语句
           $$ = std::make_unique<FuncDefStmt>($2, $4, std::move($6));
       }
     | RETURN expr ';' { // 函数返回语句
           $$ = std::make_unique<ReturnStmt>(std::move($2));
       }
-    | IF '(' expr ')' stmt { // if 条件判断
+    | IF '(' expr ')' stmt { // 条件判断语句
           $$ = std::make_unique<IfStmt>(std::move($3), std::move($5), nullptr);
     }
-    | IF '(' expr ')' stmt ELSE stmt { // if 条件判断
+    | IF '(' expr ')' stmt ELSE stmt {
           $$ = std::make_unique<IfStmt>(std::move($3), std::move($5), std::move($7));
+    }
+    | WHILE '(' expr ')' stmt { // 循环语句
+          $$ = std::make_unique<WhileStmt>(std::move($3), std::move($5));
     }
     ;
 expr

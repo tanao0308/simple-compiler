@@ -40,11 +40,10 @@ class CompilerContext {
         var2val[varDef.name] = std::make_shared<VarDef>(varDef); // 拷贝，非引用
     }
     std::shared_ptr<VarDef> getVar(const std::string &name) {
-        auto it = var2val.find(name);
-        if (it == var2val.end()) {
-            return nullptr;
+        if (var2val.find(name) == var2val.end()) {
+            var2val[name] = std::make_shared<VarDef>(name, 0);
         }
-        return it->second;
+        return var2val[name];
     }
     void setFunc(const FuncDef &funcDef) {
         func2def[funcDef.name] = std::make_shared<FuncDef>(funcDef);

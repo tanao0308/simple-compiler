@@ -27,9 +27,9 @@ class IfStmt : public Stmt {
     // 需要传递expr给context，因此使用shared_ptr
     ASTResult execute(CompilerContext &ctx) {
         auto ifParam = ifExpr->execute(ctx);
-        if (abs(ifParam.val) < 1e-6) { // TODO 增加类型时修改
+        if (abs(ifParam.val) >= 1e-6) { // TODO 增加类型时修改
             result = ifStmt->execute(ctx);
-        } else {
+        } else if(elseStmt) {
             result = elseStmt->execute(ctx);
         }
         return result;
