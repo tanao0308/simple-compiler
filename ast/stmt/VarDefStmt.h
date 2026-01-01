@@ -11,13 +11,15 @@ class VarDefStmt : public Stmt {
         name = "var_def_stmt";
     }
     void print(std::string prefix = "") override {
-        std::cout << prefix << name << " " << var << std::endl;
+        std::cout << prefix << "└───" << name << ": ";
+        std::cout << var << " | " << result.val << std::endl;
         prefix += TAB;
         expr->print(prefix);
     }
     ASTResult execute(CompilerContext &ctx) {
-        ctx.setVar({var, expr->execute(ctx).getVal()});
-        return ASTResult(0);
+        ctx.setVar(VarDef(var, expr->execute(ctx).val));
+        result = ASTResult(0);
+        return result;
     }
 
   private:

@@ -11,7 +11,8 @@ class CallExpr : public Expr {
         name = "call_expr";
     }
     void print(std::string prefix = "") override {
-        std::cout << prefix << name << " " << funcName << std::endl;
+        std::cout << prefix << "└───" << name << ": ";
+        std::cout << funcName << " | " << result.val << std::endl;
         prefix += TAB;
         param->print(prefix);
     }
@@ -24,9 +25,9 @@ class CallExpr : public Expr {
         }
         // 获取参数表达式的结果
         auto paramRes = param->execute(ctx);
-        VarDef varDef(func->param, paramRes.getVal());
-        ctx.setVar(varDef);
-        return func->body->execute(ctx);
+        ctx.setVar(VarDef(func->param, paramRes.val));
+        result = func->body->execute(ctx);
+        return result;
     }
 
   private:

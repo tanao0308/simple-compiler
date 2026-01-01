@@ -1,4 +1,5 @@
 #pragma once
+#include "ast/CompilerContext.h"
 #include "ast/Const.h"
 #include "ast/expr/Expr.h"
 #include <cmath>
@@ -11,15 +12,15 @@ class BinaryExpr : public Expr {
         name = "binary_expr";
     }
     void print(std::string prefix = "") override {
-        std::cout << prefix << name << " " << op << std::endl;
+        std::cout << prefix << "└───" << name << ": ";
+        std::cout << op << " | " << result.val << std::endl;
         prefix += TAB;
         lhs->print(prefix);
         rhs->print(prefix);
     }
     ASTResult execute(CompilerContext &ctx) {
-        auto res = ASTResult(0);
-        res.setVal(cal(lhs->execute(ctx).getVal(), rhs->execute(ctx).getVal()));
-        return res;
+        result = ASTResult(cal(lhs->execute(ctx).val, rhs->execute(ctx).val));
+        return result;
     }
 
   private:

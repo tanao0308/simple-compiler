@@ -1,3 +1,8 @@
-a = (8 - 2) / 3;
-def f(x) = x^2 + x + 1;
-result = f(a); 
+def f(x) {
+    if (x) {
+        return 7;
+    } else {
+        return 9;
+    }
+}
+result = f(9);

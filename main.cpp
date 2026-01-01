@@ -21,7 +21,7 @@ int main() {
         return 1;
     }
     compiler.print();
-    cout << "result=" << compiler.execute().getVal() << endl;
+    cout << "result=" << compiler.execute().val << endl;
 
     return 0;
 }

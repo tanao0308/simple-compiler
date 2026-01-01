@@ -8,11 +8,12 @@ class VariableExpr : public Expr {
   public:
     VariableExpr(std::string var) : Expr(), var(var) { name = "variable_expr"; }
     void print(std::string prefix = "") override {
-        std::cout << prefix << name << " " << var << std::endl;
+        std::cout << prefix << "└───" << name << ": ";
+        std::cout << var << " | " << result.val << std::endl;
     }
     ASTResult execute(CompilerContext &ctx) {
-        auto res = ASTResult(ctx.getVar(var)->val);
-        return res;
+        result = ASTResult(ctx.getVar(var)->val);
+        return result;
     }
 
   private:

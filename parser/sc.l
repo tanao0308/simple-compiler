@@ -10,6 +10,9 @@
 
 %%
 "def"           { return yy::parser::token::DEF; } // 函数定义关键字
+"return"           { return yy::parser::token::RETURN; } // 函数定义关键字
+"if"            { return yy::parser::token::IF; } // 函数定义关键字
+"else"          { return yy::parser::token::ELSE; } // 函数定义关键字
 [0-9]+(\.[0-9]*)?([eE][+-]?[0-9]+)? { // 数字
                 char *endptr;
                 errno = 0;
@@ -27,7 +30,7 @@
                     yylval->emplace<std::string>(yytext);
                     return yy::parser::token::IDENT;
                 }
-[()+\-*/^=;]     { return yytext[0]; } // 单个符号
+[(){}+\-*/^=;]     { return yytext[0]; } // 单个符号
 [ \t\r\n]+      ;   // 忽略空白
 .               ;   // 忽略其他字符
 %%

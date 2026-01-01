@@ -4,10 +4,10 @@
 #include "ast/stmt/Stmt.h"
 #include <iostream>
 
-class ExprStmt : public Stmt {
+class ReturnStmt : public Stmt {
   public:
-    ExprStmt(std::unique_ptr<Expr> expr) : Stmt(), expr(std::move(expr)) {
-        name = "expr_stmt";
+    ReturnStmt(std::unique_ptr<Expr> expr) : Stmt(), expr(std::move(expr)) {
+        name = "return_stmt";
     }
     void print(std::string prefix = "") override {
         std::cout << prefix << "└───" << name << ": ";
@@ -17,6 +17,7 @@ class ExprStmt : public Stmt {
     }
     ASTResult execute(CompilerContext &ctx) {
         result = expr->execute(ctx);
+        result.signal = ControlSignal::Return;
         return result;
     }
 

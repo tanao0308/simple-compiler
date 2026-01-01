@@ -1,0 +1,4 @@
+a = (8 - 2) / 3;
+def f(x) = x^2;
+def g(x) = x^(1/2);
+result = f(g(a));

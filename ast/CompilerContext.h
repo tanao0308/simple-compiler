@@ -6,13 +6,13 @@
 #include <vector>
 
 class ASTNode;
-class Expr;
+class Stmt;
 
 struct FuncDef {
     std::string name;
     std::string param;
-    std::shared_ptr<Expr> body;
-    FuncDef(std::string name, std::string param, std::shared_ptr<Expr> body)
+    std::shared_ptr<Stmt> body;
+    FuncDef(std::string name, std::string param, std::shared_ptr<Stmt> body)
         : name(name), param(param), body(body) {}
 };
 

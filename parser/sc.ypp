@@ -7,21 +7,6 @@
 %parse-param { Compiler& compiler } // ast 的根节点
 
 %{
-  #include <map>
-  #include <string>
-  #include <memory>
-  #include <iostream>
-  #include "ast/Compiler.h"
-  #include "ast/program/Program.h"
-  #include "ast/stmt/Stmt.h"
-  #include "ast/stmt/ExprStmt.h"
-  #include "ast/stmt/FuncDefStmt.h"
-  #include "ast/stmt/VarDefStmt.h"
-  #include "ast/expr/Expr.h"
-  #include "ast/expr/BinaryExpr.h"
-  #include "ast/expr/NumberExpr.h"
-  #include "ast/expr/VariableExpr.h"
-  #include "ast/expr/CallExpr.h"
 %}
 
 %code requires {
@@ -31,6 +16,9 @@
   #include "ast/stmt/ExprStmt.h"
   #include "ast/stmt/FuncDefStmt.h"
   #include "ast/stmt/VarDefStmt.h"
+  #include "ast/stmt/ListStmt.h"
+  #include "ast/stmt/ReturnStmt.h"
+  #include "ast/stmt/IfStmt.h"
   #include "ast/expr/Expr.h"
   #include "ast/expr/BinaryExpr.h"
   #include "ast/expr/NumberExpr.h"
@@ -49,12 +37,13 @@
 // 终结符
 %token <double> NUMBER
 %token <std::string> IDENT
-%token DEF
+%token DEF RETURN IF ELSE
 
 // 非终结符
 %type <std::unique_ptr<Program>> program
-%type <std::vector<std::unique_ptr<Stmt>>> stmt_list
 %type <std::unique_ptr<Stmt>> stmt
+%type <std::unique_ptr<Stmt>> simple_stmt
+%type <std::vector<std::unique_ptr<Stmt>>> list_stmt
 %type <std::unique_ptr<Expr>> expr
 
 // 优先级
@@ -64,32 +53,48 @@
 
 %%
 program
-    : stmt_list {
+    : list_stmt {
           $$ = std::make_unique<Program>(std::move($1));
           compiler.setRoot(std::move($$));
       }
     ;
-stmt_list
-    : stmt_list stmt {
+stmt
+    : simple_stmt {
+      { $$ = std::move($1); }
+    }
+    | '{' list_stmt '}' // ListStmt
+        { $$ = std::make_unique<ListStmt>(std::move($2)); }
+    ;
+list_stmt
+    : list_stmt stmt {
           // 是否能化简为 $$.push_back(std::move($2)) ? TODO
           $1.push_back(std::move($2));
           $$ = std::move($1);
       }
     | stmt {
-          // $$ = std::vector<std::unique_ptr<Stmt>>(); // TODO 这里是否必须 new
+          $$ = std::vector<std::unique_ptr<Stmt>>();
           $$.push_back(std::move($1));
       }
     ;
-stmt
+simple_stmt
     : expr ';' { // 语句用分号结束
           $$ = std::make_unique<ExprStmt>(std::move($1));
       }
     | IDENT '=' expr ';' { // 变量定义/赋值语句
           $$ = std::make_unique<VarDefStmt>($1, std::move($3));
       }
-    | DEF IDENT '(' IDENT ')' '=' expr ';' { // 函数定义语句 def f(x) = x * 2;
-          $$ = std::make_unique<FuncDefStmt>($2, $4, std::move($7));
+    | DEF IDENT '(' IDENT ')' stmt { // 新版函数定义语句 def f(x) { y=x*2; return y; }
+          $$ = std::make_unique<FuncDefStmt>($2, $4, std::move($6));
       }
+    | RETURN expr ';' { // 函数返回语句
+          $$ = std::make_unique<ReturnStmt>(std::move($2));
+      }
+    | IF '(' expr ')' stmt { // if 条件判断
+          $$ = std::make_unique<IfStmt>(std::move($3), std::move($5), nullptr);
+    }
+    | IF '(' expr ')' stmt ELSE stmt { // if 条件判断
+          $$ = std::make_unique<IfStmt>(std::move($3), std::move($5), std::move($7));
+    }
     ;
 expr
     : NUMBER { // 数字表达式
