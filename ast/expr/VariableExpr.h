@@ -6,12 +6,13 @@
 
 class VariableExpr : public Expr {
   public:
-    VariableExpr(std::shared_ptr<CompilerContext> cc, std::string var)
-        : Expr(cc), var(var) {
-        name = "variable_expr";
-    }
+    VariableExpr(std::string var) : Expr(), var(var) { name = "variable_expr"; }
     void print(std::string prefix = "") override {
         std::cout << prefix << name << " " << var << std::endl;
+    }
+    ASTResult execute(CompilerContext &ctx) {
+        auto res = ASTResult(ctx.getVar(var)->val);
+        return res;
     }
 
   private:

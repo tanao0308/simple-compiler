@@ -5,12 +5,13 @@
 
 class NumberExpr : public Expr {
   public:
-    NumberExpr(std::shared_ptr<CompilerContext> cc, double num)
-        : Expr(cc), num(num) {
-        name = "number_expr";
-    }
+    NumberExpr(double num) : Expr(), num(num) { name = "number_expr"; }
     void print(std::string prefix = "") override {
-        std::cout << prefix << " " << name << " " << num << std::endl;
+        std::cout << prefix << name << " " << num << std::endl;
+    }
+    ASTResult execute(CompilerContext &ctx) {
+        auto res = ASTResult(num);
+        return res;
     }
 
   private:

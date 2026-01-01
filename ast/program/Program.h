@@ -7,18 +7,31 @@
 
 class Program : public ASTNode {
   public:
-    Program(std::shared_ptr<CompilerContext> cc, std::vector<Stmt *> *stmts)
-        : ASTNode(cc), stmts(stmts) {
+    // 要转移 vector<unique ptr> 也需要 move
+    Program(std::vector<std::unique_ptr<Stmt>> &&stmts)
+        : ASTNode(), stmts(std::move(stmts)) {
         name = "program";
     }
     void print(std::string prefix = "") override {
         std::cout << prefix << name << std::endl;
         prefix += TAB;
-        for (auto stmt : *stmts) {
+        for (auto &stmt : stmts) {
             stmt->print(prefix);
         }
     }
+    ASTResult execute(CompilerContext &ctx) {
+        for (auto &stmt : stmts) {
+            stmt->execute(ctx);
+        }
+        auto var = ctx.getVar("result");
+        if (!var) {
+            // 符号表找不到 var
+            return ASTResult(0);
+        }
+        auto res = ASTResult(var->val);
+        return res;
+    }
 
   private:
-    std::vector<Stmt *> *stmts;
+    std::vector<std::unique_ptr<Stmt>> stmts;
 };

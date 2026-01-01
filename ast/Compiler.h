@@ -5,13 +5,16 @@
 
 class Compiler {
   public:
-    Compiler() : cc(std::make_shared<CompilerContext>()), root(nullptr) {}
-    void setRoot(std::shared_ptr<Program> program) { root = program; }
-    std::shared_ptr<CompilerContext> getCc() { return cc; }
+    Compiler() : ctx(), root(nullptr) {}
+    void setRoot(std::unique_ptr<Program> program) {
+        root = std::move(program);
+    }
+    // 只访问，返回引用
+    // const CompilerContext& getCtx() { return *ctx; }
     void print() { root->print(); }
-    std::unique_ptr<ASTResult> execute() { return root->execute(); }
+    ASTResult execute() { return root->execute(ctx); }
 
   private:
-    std::shared_ptr<CompilerContext> cc;
-    std::shared_ptr<Program> root;
+    CompilerContext ctx;
+    std::unique_ptr<Program> root;
 };

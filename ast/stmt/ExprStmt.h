@@ -6,8 +6,7 @@
 
 class ExprStmt : public Stmt {
   public:
-    ExprStmt(std::shared_ptr<CompilerContext> cc, Expr *expr)
-        : Stmt(cc), expr(expr) {
+    ExprStmt(std::unique_ptr<Expr> expr) : Stmt(), expr(std::move(expr)) {
         name = "expr_stmt";
     }
     void print(std::string prefix = "") override {
@@ -15,8 +14,8 @@ class ExprStmt : public Stmt {
         prefix += TAB;
         expr->print(prefix);
     }
-    std::unique_ptr<ASTResult> execute() { return expr->execute(); }
+    ASTResult execute(CompilerContext &ctx) { return expr->execute(ctx); }
 
   private:
-    Expr *expr;
+    std::unique_ptr<Expr> expr;
 };

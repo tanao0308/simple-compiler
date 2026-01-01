@@ -3,5 +3,5 @@
 
 class Expr : public ASTNode {
   public:
-    Expr(std::shared_ptr<CompilerContext> cc) : ASTNode(cc) {}
+    Expr() : ASTNode() {}
 };

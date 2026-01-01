@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -11,17 +12,20 @@ struct FuncDef {
     std::string name;
     std::string param;
     std::shared_ptr<Expr> body;
+    FuncDef(std::string name, std::string param, std::shared_ptr<Expr> body)
+        : name(name), param(param), body(body) {}
 };
 
 struct VarDef {
     std::string name;
     double val;
+    VarDef(std::string name, double val) : name(name), val(val) {}
 };
 
 class CompilerContext {
   public:
-    CompilerContext();
-    ~CompilerContext();
+    CompilerContext() {}
+    ~CompilerContext() {}
 
     // 禁止拷贝
     CompilerContext(const CompilerContext &) = delete;
@@ -33,9 +37,9 @@ class CompilerContext {
 
     // 增删符号表
     void setVar(const VarDef &varDef) {
-        var2val[varDef.name] = std::make_shared<VarDef>(varDef);
+        var2val[varDef.name] = std::make_shared<VarDef>(varDef); // 拷贝，非引用
     }
-    std::shared_ptr<const VarDef> getVar(const std::string &name) {
+    std::shared_ptr<VarDef> getVar(const std::string &name) {
         auto it = var2val.find(name);
         if (it == var2val.end()) {
             return nullptr;
@@ -45,7 +49,7 @@ class CompilerContext {
     void setFunc(const FuncDef &funcDef) {
         func2def[funcDef.name] = std::make_shared<FuncDef>(funcDef);
     }
-    std::shared_ptr<const FuncDef> getFunc(const std::string &name) {
+    std::shared_ptr<FuncDef> getFunc(const std::string &name) {
         auto it = func2def.find(name);
         if (it == func2def.end()) {
             return nullptr;

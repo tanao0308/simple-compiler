@@ -6,27 +6,30 @@
 
 class CallExpr : public Expr {
   public:
-    CallExpr(std::shared_ptr<CompilerContext> cc, std::string funcName,
-             Expr *parm)
-        : Expr(cc), funcName(funcName), parm(parm) {
+    CallExpr(std::string funcName, std::unique_ptr<Expr> param)
+        : Expr(), funcName(funcName), param(std::move(param)) {
         name = "call_expr";
     }
     void print(std::string prefix = "") override {
         std::cout << prefix << name << " " << funcName << std::endl;
         prefix += TAB;
-        parm->print(prefix);
+        param->print(prefix);
     }
-    std::unique_ptr<ASTResult> execute() {
-        // 获取参数表达式的结果
-        auto parmRes = parm->execute();
+    ASTResult execute(CompilerContext &ctx) {
         // 将参数带入函数体
-        auto funcDef = cc->getFunc(funcName);
-        VarDef varDef = {funcDef->param, parmRes->getVal()};
-        cc->setVar(varDef);
-        return funcDef->body->execute();
+        auto func = ctx.getFunc(funcName);
+        if (!func) {
+            // 符号表找不到 func
+            return ASTResult(0);
+        }
+        // 获取参数表达式的结果
+        auto paramRes = param->execute(ctx);
+        VarDef varDef(func->param, paramRes.getVal());
+        ctx.setVar(varDef);
+        return func->body->execute(ctx);
     }
 
   private:
     std::string funcName;
-    Expr *parm;
+    std::unique_ptr<Expr> param;
 };

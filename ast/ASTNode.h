@@ -18,13 +18,12 @@ class ASTResult {
 
 class ASTNode {
   public:
-    ASTNode(std::shared_ptr<CompilerContext> cc) : cc(cc) {}
+    ASTNode() {}
     virtual ~ASTNode() = default;
     virtual void print(std::string prefix = "") = 0;
-    virtual std::unique_ptr<ASTResult> execute() = 0;
+    virtual ASTResult execute([[maybe_unused]] CompilerContext &ctx) = 0;
 
   protected:
-    std::shared_ptr<CompilerContext> cc;
     std::string name;
 
   private:

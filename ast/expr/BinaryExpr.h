@@ -6,9 +6,8 @@
 
 class BinaryExpr : public Expr {
   public:
-    BinaryExpr(std::shared_ptr<CompilerContext> cc, char op, Expr *lhs,
-               Expr *rhs)
-        : Expr(cc), op(op), lhs(lhs), rhs(rhs) {
+    BinaryExpr(char op, std::unique_ptr<Expr> lhs, std::unique_ptr<Expr> rhs)
+        : Expr(), op(op), lhs(std::move(lhs)), rhs(std::move(rhs)) {
         name = "binary_expr";
     }
     void print(std::string prefix = "") override {
@@ -17,16 +16,16 @@ class BinaryExpr : public Expr {
         lhs->print(prefix);
         rhs->print(prefix);
     }
-    std::unique_ptr<ASTResult> execute() {
-        auto res = std::make_unique<ASTResult>(0);
-        res->setVal(cal(lhs->execute()->getVal(), lhs->execute()->getVal()));
+    ASTResult execute(CompilerContext &ctx) {
+        auto res = ASTResult(0);
+        res.setVal(cal(lhs->execute(ctx).getVal(), rhs->execute(ctx).getVal()));
         return res;
     }
 
   private:
     char op;
-    Expr *lhs;
-    Expr *rhs;
+    std::unique_ptr<Expr> lhs;
+    std::unique_ptr<Expr> rhs;
     double cal(double lnum, double rnum) {
         switch (op) {
             case '+':
