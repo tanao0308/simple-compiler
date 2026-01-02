@@ -1,16 +1,16 @@
 #pragma once
 
+#include <memory>
+#include <string>
+
 #include "ast/CompilerContext.h"
 #include "ast/Const.h"
 #include "ast/Type.h"
-#include <memory>
-#include <string>
 
 struct ASTResult {
     Variable val;
     ControlSignal signal;
-    ASTResult(Variable val, ControlSignal signal = ControlSignal::Normal)
-        : val(val), signal(signal) {}
+    ASTResult(Variable val, ControlSignal signal = ControlSignal::Normal) : val(val), signal(signal) {}
     void print() { std::cout << val; }
 };
 

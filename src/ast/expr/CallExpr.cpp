@@ -1,8 +1,10 @@
 #include "ast/expr/CallExpr.h"
-#include "ast/Const.h"
-#include "ast/stmt/Stmt.h"
+
 #include <iostream>
 #include <string>
+
+#include "ast/Const.h"
+#include "ast/stmt/Stmt.h"
 
 CallExpr::CallExpr(std::string funcName, std::unique_ptr<Expr> param)
     : Expr(), funcName(funcName), param(std::move(param)) {

@@ -1,9 +1,10 @@
 
+#include <iostream>
+#include <variant>
+
 #include "ast/Compiler.h"
 #include "ast/program/Program.h"
 #include "sc.tab.hpp"
-#include <iostream>
-#include <variant>
 
 using namespace std;
 

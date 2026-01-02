@@ -1,12 +1,13 @@
 #pragma once
-#include "ast/Const.h"
-#include "ast/Type.h"
 #include <iostream>
 #include <memory>
 #include <optional>
 #include <string>
 #include <unordered_map>
 #include <vector>
+
+#include "ast/Const.h"
+#include "ast/Type.h"
 
 class ASTNode;
 class Stmt;

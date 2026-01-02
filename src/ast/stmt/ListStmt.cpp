@@ -1,11 +1,10 @@
 #include "ast/stmt/ListStmt.h"
+
+#include <iostream>
+
 #include "ast/Const.h"
 #include "ast/expr/Expr.h"
-#include <iostream>
-ListStmt::ListStmt(std::vector<std::unique_ptr<Stmt>> &&stmts)
-    : Stmt(), stmts(std::move(stmts)) {
-    name = "list_stmt";
-}
+ListStmt::ListStmt(std::vector<std::unique_ptr<Stmt>> &&stmts) : Stmt(), stmts(std::move(stmts)) { name = "list_stmt"; }
 void ListStmt::print(std::string prefix) {
     std::cout << prefix << "└───" << name << ": ";
     std::cout << "[result]";

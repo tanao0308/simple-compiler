@@ -1,13 +1,13 @@
 #include "ast/stmt/IfStmt.h"
-#include "ast/Const.h"
+
 #include <cmath>
 #include <iostream>
 #include <string>
 
-IfStmt::IfStmt(std::unique_ptr<Expr> ifExpr, std::unique_ptr<Stmt> ifStmt,
-               std::unique_ptr<Stmt> elseStmt)
-    : Stmt(), ifExpr(std::move(ifExpr)), ifStmt(std::move(ifStmt)),
-      elseStmt(std::move(elseStmt)) {
+#include "ast/Const.h"
+
+IfStmt::IfStmt(std::unique_ptr<Expr> ifExpr, std::unique_ptr<Stmt> ifStmt, std::unique_ptr<Stmt> elseStmt)
+    : Stmt(), ifExpr(std::move(ifExpr)), ifStmt(std::move(ifStmt)), elseStmt(std::move(elseStmt)) {
     name = "if_stmt";
 }
 void IfStmt::print(std::string prefix) {

@@ -1,11 +1,11 @@
 #include "ast/expr/VariableExpr.h"
-#include "ast/Const.h"
+
 #include <iostream>
 #include <string>
 
-VariableExpr::VariableExpr(std::string var) : Expr(), var(var) {
-    name = "variable_expr";
-}
+#include "ast/Const.h"
+
+VariableExpr::VariableExpr(std::string var) : Expr(), var(var) { name = "variable_expr"; }
 void VariableExpr::print(std::string prefix) {
     std::cout << prefix << "└───" << name << ": ";
     std::cout << var << ": ";

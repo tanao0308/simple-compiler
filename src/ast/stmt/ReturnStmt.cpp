@@ -1,11 +1,10 @@
 #include "ast/stmt/ReturnStmt.h"
-#include "ast/Const.h"
+
 #include <iostream>
 
-ReturnStmt::ReturnStmt(std::unique_ptr<Expr> expr)
-    : Stmt(), expr(std::move(expr)) {
-    name = "return_stmt";
-}
+#include "ast/Const.h"
+
+ReturnStmt::ReturnStmt(std::unique_ptr<Expr> expr) : Stmt(), expr(std::move(expr)) { name = "return_stmt"; }
 void ReturnStmt::print(std::string prefix) {
     std::cout << prefix << "└───" << name << ": ";
     std::cout << "[result]";

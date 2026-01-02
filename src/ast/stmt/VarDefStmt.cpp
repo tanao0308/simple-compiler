@@ -1,9 +1,9 @@
 #include "ast/stmt/VarDefStmt.h"
 
-#include "ast/Const.h"
 #include <iostream>
-VarDefStmt::VarDefStmt(std::string var, std::unique_ptr<Expr> expr)
-    : Stmt(), var(var), expr(std::move(expr)) {
+
+#include "ast/Const.h"
+VarDefStmt::VarDefStmt(std::string var, std::unique_ptr<Expr> expr) : Stmt(), var(var), expr(std::move(expr)) {
     name = "var_def_stmt";
 }
 void VarDefStmt::print(std::string prefix) {

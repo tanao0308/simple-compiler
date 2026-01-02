@@ -1,14 +1,13 @@
 #include "ast/program/Program.h"
-#include "ast/ASTNode.h"
-#include "ast/Const.h"
-#include "ast/stmt/Stmt.h"
+
 #include <iostream>
 #include <vector>
 
-Program::Program(std::vector<std::unique_ptr<Stmt>> &&stmts)
-    : ASTNode(), stmts(std::move(stmts)) {
-    name = "program";
-}
+#include "ast/ASTNode.h"
+#include "ast/Const.h"
+#include "ast/stmt/Stmt.h"
+
+Program::Program(std::vector<std::unique_ptr<Stmt>> &&stmts) : ASTNode(), stmts(std::move(stmts)) { name = "program"; }
 void Program::print(std::string prefix) {
     std::cout << prefix << name << ": ";
     std::cout << "[result]";

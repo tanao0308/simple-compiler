@@ -1,11 +1,12 @@
 #include "ast/stmt/WhileStmt.h"
-#include "ast/Const.h"
+
 #include <cmath>
 #include <iostream>
 #include <string>
 
-WhileStmt::WhileStmt(std::unique_ptr<Expr> whileExpr,
-                     std::unique_ptr<Stmt> whileStmt)
+#include "ast/Const.h"
+
+WhileStmt::WhileStmt(std::unique_ptr<Expr> whileExpr, std::unique_ptr<Stmt> whileStmt)
     : Stmt(), whileExpr(std::move(whileExpr)), whileStmt(std::move(whileStmt)) {
     name = "while_stmt";
 }
