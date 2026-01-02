@@ -1,17 +1,13 @@
-def g(x) {
-    if (x) {
-        return 1;
-    } else {
-        return 2;
-    }
-}
-def f(y) {
-    res=0;
-    while(y+1) {
-        res=res+y+g(y);
-        y=y-1;
+def dfs(d) {
+    res=1;
+    if (d) {
+        res = res + dfs(d-1);
+        if(d-1) {
+            res = res + dfs(d-2);
+        }
     }
     return res;
 }
 
-result = f(2);
+d=10;
+result = dfs(d);

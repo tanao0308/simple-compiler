@@ -3,6 +3,7 @@
 #include "ast/program/Program.h"
 #include "sc.tab.hpp"
 #include <iostream>
+#include <variant>
 
 using namespace std;
 
@@ -20,8 +21,8 @@ int main() {
         cout << "编译错误" << endl;
         return 1;
     }
-    compiler.print();
     cout << "result=" << compiler.execute().val << endl;
+    compiler.print();
 
     return 0;
 }

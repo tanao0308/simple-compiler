@@ -1,4 +1,7 @@
 #pragma once
+#include "ast/Const.h"
+#include "ast/Type.h"
+#include <iostream>
 #include <memory>
 #include <optional>
 #include <string>
@@ -8,23 +11,9 @@
 class ASTNode;
 class Stmt;
 
-struct FuncDef {
-    std::string name;
-    std::string param;
-    std::shared_ptr<Stmt> body;
-    FuncDef(std::string name, std::string param, std::shared_ptr<Stmt> body)
-        : name(name), param(param), body(body) {}
-};
-
-struct VarDef {
-    std::string name;
-    double val;
-    VarDef(std::string name, double val) : name(name), val(val) {}
-};
-
 class CompilerContext {
   public:
-    CompilerContext() {}
+    CompilerContext() { pushScope(); }
     ~CompilerContext() {}
 
     // 禁止拷贝
@@ -36,36 +25,35 @@ class CompilerContext {
     CompilerContext &operator=(CompilerContext &&) = default;
 
     // 增删符号表
-    void setVar(const VarDef &varDef) {
-        var2val[varDef.name] = std::make_shared<VarDef>(varDef); // 拷贝，非引用
+    void setVar(const std::string &name, const Variable &var) {
+        scopes.back()[name] = var;
     }
-    std::shared_ptr<VarDef> getVar(const std::string &name) {
-        if (var2val.find(name) == var2val.end()) {
-            var2val[name] = std::make_shared<VarDef>(name, 0);
+    Variable getVar(const std::string &name) {
+        for (auto it = scopes.rbegin(); it != scopes.rend(); ++it) {
+            auto found = it->find(name);
+            if (found != it->end()) {
+                return found->second;
+            }
         }
-        return var2val[name];
+        throw std::runtime_error("Undefined variable: " + name);
     }
-    void setFunc(const FuncDef &funcDef) {
-        func2def[funcDef.name] = std::make_shared<FuncDef>(funcDef);
+    void setFunc(const Function func) {
+        functions[func.name] = std::make_shared<Function>(func);
     }
-    std::shared_ptr<FuncDef> getFunc(const std::string &name) {
-        auto it = func2def.find(name);
-        if (it == func2def.end()) {
-            return nullptr;
+    std::shared_ptr<Function> getFunc(const std::string &name) {
+        auto found = functions.find(name);
+        if (found != functions.end()) {
+            return found->second;
         }
-        return it->second;
+        throw std::runtime_error("Undefined function: " + name);
     }
-
-    // 清空上下文（用于重新编译）
-    void clear() {
-        var2val.clear();
-        func2def.clear();
-    }
+    // 变量定义域
+    void pushScope() { scopes.push_back({}); }
+    void popScope() { scopes.pop_back(); }
 
   private:
     // 符号表
-    std::unordered_map<std::string, std::shared_ptr<VarDef>> var2val;
-    std::unordered_map<std::string, std::shared_ptr<FuncDef>> func2def;
+    using Scope = std::unordered_map<std::string, Variable>;
+    std::vector<Scope> scopes;
+    std::unordered_map<std::string, std::shared_ptr<Function>> functions;
 };
-
-// 使用：在 main 中创建，层层传递

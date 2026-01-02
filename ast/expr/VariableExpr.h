@@ -9,10 +9,13 @@ class VariableExpr : public Expr {
     VariableExpr(std::string var) : Expr(), var(var) { name = "variable_expr"; }
     void print(std::string prefix = "") override {
         std::cout << prefix << "└───" << name << ": ";
-        std::cout << var << " | " << result.val << std::endl;
+        std::cout << var << ": ";
+        std::cout << "[result]";
+        result.print();
+        std::cout << std::endl;
     }
     ASTResult execute(CompilerContext &ctx) {
-        result = ASTResult(ctx.getVar(var)->val);
+        result = ASTResult(ctx.getVar(var));
         return result;
     }
 

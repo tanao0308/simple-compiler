@@ -13,7 +13,10 @@ class BinaryExpr : public Expr {
     }
     void print(std::string prefix = "") override {
         std::cout << prefix << "└───" << name << ": ";
-        std::cout << op << " | " << result.val << std::endl;
+        std::cout << op << ": ";
+        std::cout << "[result]";
+        result.print();
+        std::cout << std::endl;
         prefix += TAB;
         lhs->print(prefix);
         rhs->print(prefix);
@@ -27,7 +30,7 @@ class BinaryExpr : public Expr {
     char op;
     std::unique_ptr<Expr> lhs;
     std::unique_ptr<Expr> rhs;
-    double cal(double lnum, double rnum) {
+    Variable cal(Variable lnum, Variable rnum) {
         switch (op) {
             case '+':
                 return lnum + rnum;
@@ -38,7 +41,7 @@ class BinaryExpr : public Expr {
             case '/':
                 return lnum / rnum;
             case '^':
-                return pow(lnum, rnum);
+                return lnum ^ rnum;
         }
     }
 };

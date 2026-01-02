@@ -11,7 +11,10 @@ class ExprStmt : public Stmt {
     }
     void print(std::string prefix = "") override {
         std::cout << prefix << "└───" << name << ": ";
-        std::cout << " | " << result.val << std::endl;
+        std::cout << ": ";
+        std::cout << "[result]";
+        result.print();
+        std::cout << std::endl;
         prefix += TAB;
         expr->print(prefix);
     }

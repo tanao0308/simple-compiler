@@ -12,23 +12,24 @@ class ListStmt : public Stmt {
     }
     void print(std::string prefix = "") override {
         std::cout << prefix << "└───" << name << ": ";
-        std::cout << " | " << result.val << std::endl;
+        std::cout << "[result]";
+        result.print();
+        std::cout << std::endl;
         prefix += TAB;
         for (auto &stmt : stmts) {
             stmt->print(prefix);
         }
     }
     ASTResult execute(CompilerContext &ctx) {
-        ASTResult res(0);
         for (auto &stmt : stmts) {
-            res = stmt->execute(ctx);
+            ASTResult res = stmt->execute(ctx);
             if (res.signal == ControlSignal::Return) {
                 result = res;
                 return result;
             }
         }
         // 无 return 的 list stmt
-        return result = ASTResult(0);
+        return result = ASTResult(Variable());
     }
 
   private:

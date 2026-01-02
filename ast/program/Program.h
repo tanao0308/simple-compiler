@@ -13,7 +13,10 @@ class Program : public ASTNode {
         name = "program";
     }
     void print(std::string prefix = "") override {
-        std::cout << prefix << name << " | " << result.val << std::endl;
+        std::cout << prefix << name << ": ";
+        std::cout << "[result]";
+        result.print();
+        std::cout << std::endl;
         prefix += TAB;
         for (auto &stmt : stmts) {
             stmt->print(prefix);
@@ -23,12 +26,8 @@ class Program : public ASTNode {
         for (auto &stmt : stmts) {
             stmt->execute(ctx);
         }
-        auto var = ctx.getVar("result");
-        if (!var) {
-            // 符号表找不到 var
-            return ASTResult(0);
-        }
-        result = ASTResult(var->val);
+        auto val = ctx.getVar("result");
+        result = ASTResult(val);
         return result;
     }
 

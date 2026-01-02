@@ -15,15 +15,18 @@ class FuncDefStmt : public Stmt {
     }
     void print(std::string prefix = "") override {
         std::cout << prefix << "└───" << name << ": ";
-        std::cout << func << "(" << param << ") " 
-                  << " | " << result.val << std::endl;
+        std::cout << func << "(" << param << ") "
+                  << ": ";
+        std::cout << "[result]";
+        result.print();
+        std::cout << std::endl;
         prefix += TAB;
         stmt->print(prefix);
     }
     // 需要传递expr给context，因此使用shared_ptr
     ASTResult execute(CompilerContext &ctx) {
-        ctx.setFunc(FuncDef(func, param, stmt));
-        result = ASTResult(0);
+        ctx.setFunc(Function(func, param, stmt));
+        result = ASTResult(Variable());
         return result;
     }
 

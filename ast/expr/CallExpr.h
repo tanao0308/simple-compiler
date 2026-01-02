@@ -12,7 +12,10 @@ class CallExpr : public Expr {
     }
     void print(std::string prefix = "") override {
         std::cout << prefix << "└───" << name << ": ";
-        std::cout << funcName << " | " << result.val << std::endl;
+        std::cout << funcName << ": ";
+        std::cout << "[result]";
+        result.print();
+        std::cout << std::endl;
         prefix += TAB;
         param->print(prefix);
     }
@@ -24,8 +27,10 @@ class CallExpr : public Expr {
         }
         // 获取参数表达式的结果
         auto paramRes = param->execute(ctx);
-        ctx.setVar(VarDef(func->param, paramRes.val));
+        ctx.pushScope(); // 先嵌套作用域，再设置参数
+        ctx.setVar(func->param, Variable(paramRes.val));
         result = func->body->execute(ctx);
+        ctx.popScope();
         return result;
     }
 

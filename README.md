@@ -5,11 +5,16 @@
 ### 变量定义/赋值
     var = 1;
     暂不支持变量与函数参数变量重复
-### if/else
+### 条件语句
     if (x) {
         return 7;
     } else {
         return 9;
+    }
+### 循环语句
+    while (x) {
+        res = res + x;
+        x = x - 1;
     }
 ### 函数定义/调用
     def func(x)

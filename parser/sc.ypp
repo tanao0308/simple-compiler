@@ -68,7 +68,6 @@ stmt
     ;
 list_stmt
     : list_stmt stmt {
-          // 是否能化简为 $$.push_back(std::move($2)) ? TODO
           $1.push_back(std::move($2));
           $$ = std::move($1);
       }
@@ -102,7 +101,7 @@ simple_stmt
     ;
 expr
     : NUMBER { // 数字表达式
-          $$ = std::make_unique<NumberExpr>($1);
+          $$ = std::make_unique<NumberExpr>(Variable($1));
       }
     | IDENT { // 变量名表达式
           $$ = std::make_unique<VariableExpr>($1);
